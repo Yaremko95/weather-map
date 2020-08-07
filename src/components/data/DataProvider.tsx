@@ -7,16 +7,13 @@ const DataContext = React.createContext<any | undefined>(undefined);
 export const useData = () => {
   const context = React.useContext(DataContext);
   const [
-    query,
-    setQuery,
-    current,
-    setCurrent,
-    hourly,
-    setHourly,
-    daily,
-    setDaily,
+    [current, setCurrent],
+    [hourly, setHourly],
+    [daily, setDaily],
     timezone,
     setTimezone,
+    query,
+    setQuery,
   ] = context;
   console.log(context);
   const fetchData = async (query: string) => {
@@ -39,9 +36,6 @@ export const useData = () => {
           });
       })
       .catch((e) => console.log(e));
-
-    // const data = await response.json();
-    // // setData(data.data);
   };
   return {
     query,
@@ -64,24 +58,20 @@ function DataProvider({ children }: DataProviderProps) {
   const [daily, setDaily] = React.useState([]);
   const [timezone, setTimezone] = React.useState("");
   const [query, setQuery] = React.useState("");
-  const queryValue = React.useMemo(() => [query, setQuery], [query]);
-  const currentValue = React.useMemo(() => [current, setCurrent], [current]);
-  const hourlyValue = React.useMemo(() => [hourly, setHourly], [hourly]);
-  const dailyValue = React.useMemo(() => [daily, setDaily], [daily]);
-  const timezoneValue = React.useMemo(() => [timezone, setTimezone], [daily]);
-  return (
-    <DataContext.Provider
-      value={[
-        ...currentValue,
-        ...hourlyValue,
-        dailyValue,
-        ...timezoneValue,
-        ...queryValue,
-      ]}
-    >
-      {children}
-    </DataContext.Provider>
+  const value = React.useMemo(
+    () => [
+      [current, setCurrent],
+      [hourly, setHourly],
+      [daily, setDaily],
+      timezone,
+      setTimezone,
+      query,
+      setQuery,
+    ],
+    [current, hourly, daily, timezone, query]
   );
+
+  return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 }
 
 export default DataProvider;
