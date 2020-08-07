@@ -14,8 +14,10 @@ export const useData = () => {
     setTimezone,
     query,
     setQuery,
+    loading,
+    toggleLoading,
   ] = context;
-  console.log(context);
+
   const fetchData = async (query: string) => {
     fetch(
       `https://geocode.xyz?auth=828220760012715928584x6950&locate=${query}&json=1`
@@ -28,11 +30,15 @@ export const useData = () => {
         )
           .then((response) => response.json())
           .then((data) => {
-            console.log(data);
+            if (!loading) {
+              toggleLoading(true);
+              console.log(".........", loading);
+            }
             setTimezone(data.timezone);
             setCurrent(data.current);
             setHourly(data.hourly);
             setDaily(data.daily);
+            toggleLoading(false);
           });
       })
       .catch((e) => console.log(e));
@@ -49,6 +55,8 @@ export const useData = () => {
     timezone,
     setTimezone,
     fetchData,
+    loading,
+    toggleLoading,
   };
 };
 
@@ -58,6 +66,7 @@ function DataProvider({ children }: DataProviderProps) {
   const [daily, setDaily] = React.useState([]);
   const [timezone, setTimezone] = React.useState("");
   const [query, setQuery] = React.useState("");
+  const [loading, toggleLoading] = React.useState(true);
   const value = React.useMemo(
     () => [
       [current, setCurrent],
@@ -67,8 +76,10 @@ function DataProvider({ children }: DataProviderProps) {
       setTimezone,
       query,
       setQuery,
+      loading,
+      toggleLoading,
     ],
-    [current, hourly, daily, timezone, query]
+    [current, hourly, daily, timezone, query, loading]
   );
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;

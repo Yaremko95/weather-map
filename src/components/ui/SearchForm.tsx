@@ -2,13 +2,17 @@ import React from "react";
 import { useData } from "../data/DataProvider";
 
 function SearchForm() {
-  const { query, setQuery, fetchData } = useData();
+  const { query, setQuery, fetchData, toggleLoading } = useData();
+  const handleChange = (value: string) => {
+    toggleLoading(true);
+    setQuery(value);
+  };
   return (
     <input
       placeholder={"Enter city"}
       value={query}
       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-        setQuery(e.currentTarget.value)
+        handleChange(e.currentTarget.value)
       }
       onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
         e.key === "Enter" && fetchData(query)
