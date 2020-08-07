@@ -9,6 +9,7 @@ function SearchForm() {
   };
   return (
     <input
+      style={{ height: "30px", width: "300px", marginBottom: "10px" }}
       placeholder={"Enter city"}
       value={query}
       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>

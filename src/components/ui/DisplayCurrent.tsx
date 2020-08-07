@@ -48,13 +48,34 @@ function DisplayCurrent() {
   console.log(hourly);
   return (
     <div>
-      <div>
-        <span>{query}</span>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          fontSize: "20px",
+          color: "whitesmoke",
+        }}
+      >
+        <span>{query.toUpperCase()}</span>
         <span>{convertedDate}</span>
         <span>{current.weather[0].description}</span>
       </div>
-      <div>
-        <div>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "whitesmoke",
+          }}
+        >
           <img
             src={`http://openweathermap.org/img/w/${current.weather[0].icon}.png`}
           />
@@ -62,7 +83,15 @@ function DisplayCurrent() {
             {(current.temp - 273.15).toFixed(1)} <RiCelsiusLine />
           </span>
         </div>
-        <div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            marginLeft: "5rem",
+            color: "whitesmoke",
+          }}
+        >
           {current.rain && <span>Rain: </span>}
           <span>Humidity: {current.humidity}%</span>
           <span>Wind: {current.wind_speed}m/c</span>
