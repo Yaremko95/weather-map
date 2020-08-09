@@ -1,22 +1,12 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { RouteComponentProps } from "react-router-dom";
-import { useData } from "../data/DataProvider";
-import Header from "../ui/Header";
+import { gsap } from "gsap";
 import SearchForm from "../ui/SearchForm";
 import DisplayWeatherContainer from "../ui/DisplayWeatherContainer";
-// import { Spring } from "react-spring/renderprops";
-import { animated } from "react-spring";
-import { stringify } from "querystring";
+
 function Home(props: RouteComponentProps) {
-  //     // Build a spring and catch its ref
-  //     const springRef = useRef()
-  //     const props = useSpring({...values, ref: springRef})
-  // // Build a transition and catch its ref
-  //     const transitionRef = useRef()
-  //     const transitions = useTransition({...values, ref: transitionRef})
-  // // First run the spring, when it concludes run the transition
-  //     useChain([springRef, transitionRef])
-  const headerRef = useRef();
+  const headerRef = useRef(null);
+
   const items = ["Open", "Weather", "Map"];
 
   // const transitions = useTransition(items, {
@@ -33,6 +23,17 @@ function Home(props: RouteComponentProps) {
   //   ],
   //   leave: [{ innerHeight: "0 " }, { opacity: "0", height: " 0" }],
   // });
+
+  useEffect(() => {
+    // TweenLite.to(headerRef.current, 1, { x: 100, y: 100 });
+    gsap.fromTo(
+      headerRef.current,
+      { height: "0px", delay: 2 },
+      {
+        height: "auto",
+      }
+    );
+  }, []);
 
   return (
     <div
@@ -53,6 +54,9 @@ function Home(props: RouteComponentProps) {
       {/*>*/}
       {/*  {(item) => (props) => <div style={props}>{item}</div>}*/}
       {/*</Transition>*/}
+      <span style={{ height: "30px" }} ref={headerRef}>
+        Open Weather Map
+      </span>
       <SearchForm />
       <DisplayWeatherContainer />
     </div>

@@ -20,14 +20,14 @@ function DisplayCurrent() {
       "Nov",
       "Dec",
     ];
-    const weekDays = ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"];
+    const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"];
     const year = a.getFullYear();
     const month = months[a.getMonth()];
     const date = a.getDate();
     const hour = a.getHours();
     const min = a.getMinutes();
     const sec = a.getSeconds();
-    const day = weekDays[a.getDay() - 1];
+    const day = weekDays[a.getDay()];
 
     convert(
       day +

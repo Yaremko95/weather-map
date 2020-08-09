@@ -1,7 +1,7 @@
 import React from "react";
 import { createUseStyles } from "react-jss";
 import { RouteComponentProps } from "react-router-dom";
-import { useSpring, animated, config } from "react-spring";
+
 function MainLayout(props: { children: any } & RouteComponentProps) {
   const useStyles = createUseStyles({
     wrapper: {
@@ -23,17 +23,12 @@ function MainLayout(props: { children: any } & RouteComponentProps) {
     },
   });
   const classes = useStyles();
-  const [bgStill, setStill] = React.useState(false);
-  const style = useSpring({
-    from: { opacity: 0, transform: "scale(1.3)" },
-    to: { opacity: 1, transform: "scale(1)" },
-  });
 
   return (
     <div className={classes.wrapper}>
-      <animated.div className={classes.container} style={style}>
+      <div className={classes.container}>
         {React.cloneElement(props.children)}
-      </animated.div>
+      </div>
     </div>
   );
 }
