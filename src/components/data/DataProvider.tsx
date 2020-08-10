@@ -1,5 +1,6 @@
 import React from "react";
 import { Forecast, Current, Daily } from "../../types/types";
+
 export const getData = async (
   latt: number,
   longt: number,
@@ -82,6 +83,7 @@ function DataProvider({ children }: DataProviderProps) {
   React.useEffect(() => {
     window.navigator.geolocation.getCurrentPosition(
       (position) => {
+        console.log(position);
         fetch(
           `https://geocode.xyz?auth=828220760012715928584x6950&locate=${position.coords.latitude},${position.coords.longitude}&json=1`
         )
