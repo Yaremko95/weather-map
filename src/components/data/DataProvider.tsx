@@ -89,6 +89,7 @@ function DataProvider({ children }: DataProviderProps) {
         )
           .then((response) => response.json())
           .then((data) => {
+            console.log(data);
             setQuery(`${data.city}, ${data.country}`);
           });
         getData(position.coords.latitude, position.coords.longitude, (data) => {

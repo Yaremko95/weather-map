@@ -8,13 +8,19 @@ import { fade, makeStyles } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
 import gsap from "gsap";
-import { useData } from "../data/DataProvider";
+import { useData } from "../../data/DataProvider";
+import { Paper } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     color: "white",
     padding: "1rem 1rem",
+  },
+  paper: {
+    backgroundColor: "transparent",
+    color: "whitesmoke",
+    padding: "1rem 0",
   },
 
   title: {
@@ -53,7 +59,6 @@ const useStyles = makeStyles((theme) => ({
   },
   inputInput: {
     padding: theme.spacing(1.5, 1.5, 1.5, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create("width"),
     width: "100%",
@@ -79,31 +84,37 @@ const NavBar = () => {
       delay: -1.5,
     });
   }, []);
-  const { query, setQuery, fetchData } = useData();
+  const { query, setQuery, fetchData, toggleLoading } = useData();
+  const handleChange = (value: string) => {
+    toggleLoading(true);
+    setQuery(value);
+  };
   return (
     <div className={classes.root}>
-      <Toolbar>
-        <Typography className={classes.title} variant="h6" noWrap>
-          <div ref={titleRef}>Open Weather Map</div>
-        </Typography>
+      <Paper elevation={3} className={classes.paper}>
+        <Toolbar>
+          <Typography className={classes.title} variant="h6" noWrap>
+            <div ref={titleRef}>Open Weather Map</div>
+          </Typography>
 
-        <div className={classes.search} ref={searchRef}>
-          <div className={classes.searchIcon}>
-            <SearchIcon />
+          <div className={classes.search} ref={searchRef}>
+            <div className={classes.searchIcon}>
+              <SearchIcon />
+            </div>
+            <InputBase
+              placeholder="Search…"
+              value={query}
+              onChange={(e) => handleChange(e.currentTarget.value)}
+              onKeyDown={(e) => e.key === "Enter" && fetchData(query)}
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput,
+              }}
+              inputProps={{ "aria-label": "search" }}
+            />
           </div>
-          <InputBase
-            placeholder="Search…"
-            value={query}
-            onChange={(e) => setQuery(e.currentTarget.value)}
-            onKeyDown={(e) => e.key === "Enter" && fetchData(query)}
-            classes={{
-              root: classes.inputRoot,
-              input: classes.inputInput,
-            }}
-            inputProps={{ "aria-label": "search" }}
-          />
-        </div>
-      </Toolbar>
+        </Toolbar>
+      </Paper>
     </div>
   );
 };
