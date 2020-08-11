@@ -85,12 +85,13 @@ function DataProvider({ children }: DataProviderProps) {
       (position) => {
         console.log(position);
         fetch(
-          `https://geocode.xyz?auth=828220760012715928584x6950&locate=${position.coords.latitude},${position.coords.longitude}&json=1`
+          // `https://geocode.xyz?auth=828220760012715928584x6950&locate=${position.coords.latitude},${position.coords.longitude}&json=1`
+          `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${position.coords.latitude}&longitude=${position.coords.longitude}&localityLanguage=en`
         )
           .then((response) => response.json())
           .then((data) => {
             console.log(data);
-            setQuery(`${data.city}, ${data.country}`);
+            setQuery(`${data.city}`);
           });
         getData(position.coords.latitude, position.coords.longitude, (data) => {
           if (!loading) {

@@ -75,9 +75,20 @@ const NavBar = () => {
   const classes = useStyles();
   const titleRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
+  const paperRef = useRef(null);
   useEffect(() => {
     const tl = gsap.timeline();
-    tl.from(titleRef.current, 1.5, { height: 0, opacity: 0 });
+    tl.from(paperRef.current, 1, { y: -100, opacity: 0 });
+    tl.from(titleRef.current, 1.5, {
+      height: 0,
+      opacity: 0,
+      display: "none",
+      delay: -1,
+    });
+    tl.from(searchRef.current, {
+      display: "none",
+      delay: -1.5,
+    });
     tl.from(searchRef.current, 1.5, {
       opacity: 0,
       width: 0,
@@ -90,11 +101,18 @@ const NavBar = () => {
     setQuery(value);
   };
   return (
-    <div className={classes.root}>
+    <div className={classes.root} ref={paperRef}>
       <Paper elevation={3} className={classes.paper}>
         <Toolbar>
           <Typography className={classes.title} variant="h6" noWrap>
-            <div ref={titleRef}>Open Weather Map</div>
+            <div ref={titleRef}>
+              <img
+                src={
+                  "https://openweathermap.org/themes/openweathermap/assets/img/logo_white_cropped.png"
+                }
+                style={{ height: "3rem" }}
+              />
+            </div>
           </Typography>
 
           <div className={classes.search} ref={searchRef}>
