@@ -15,10 +15,14 @@ const useStyles = makeStyles((theme) => ({
 function DisplayWeatherContainer() {
   const classes = useStyles();
   const currentRef = createRef<HTMLDivElement>();
+  const chartRef = createRef<HTMLDivElement>();
 
   useEffect(() => {
     const tl = gsap.timeline();
-    tl.from(currentRef.current, { opacity: 0, y: 50, delay: 1 });
+    tl.from(currentRef.current, 1.5, {
+      opacity: 0,
+      y: 50,
+    }).from(chartRef.current, { opacity: 0, y: 50, delay: -1.5 });
   }, []);
 
   return (
@@ -27,7 +31,7 @@ function DisplayWeatherContainer() {
         <DisplayCurrent ref={currentRef} />
       </Grid>
       <Grid item xs={12} lg={6}>
-        <LineChart />
+        <LineChart ref={chartRef} />
       </Grid>
     </Grid>
   );

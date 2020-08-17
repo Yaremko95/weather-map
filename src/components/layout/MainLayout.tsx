@@ -12,7 +12,7 @@ function MainLayout(props: { children: any } & RouteComponentProps) {
     },
     container: {
       backgroundImage:
-        " linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(https://ak.picdn.net/shutterstock/videos/5903684/thumb/1.jpg)",
+        " linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(https://images.pexels.com/photos/209831/pexels-photo-209831.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260)",
       width: "100%",
       height: "100%",
       objectFit: "cover",

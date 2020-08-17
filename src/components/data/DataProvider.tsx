@@ -104,9 +104,11 @@ function DataProvider({ children }: DataProviderProps) {
           toggleLoading(false);
         });
       },
-      () => {},
+      (e) => {
+        console.log(e);
+      },
       {
-        timeout: 0,
+        // timeout: 0,
         enableHighAccuracy: true,
       }
     );
