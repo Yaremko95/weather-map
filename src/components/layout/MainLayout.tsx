@@ -7,19 +7,16 @@ function MainLayout(props: { children: any } & RouteComponentProps) {
     wrapper: {
       width: "100%",
       height: "100vh",
-      overflow: "hidden",
+
       position: "relative",
     },
     container: {
       backgroundImage:
-        " linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(https://images.pexels.com/photos/209831/pexels-photo-209831.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260)",
-      width: "100%",
-      height: "100%",
-      objectFit: "cover",
-      position: "absolute",
-      backgroundPosition: "center",
+        " linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(https://images.pexels.com/photos/209831/pexels-photo-209831.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260) ",
       backgroundRepeat: "no-repeat",
+      backgroundPosition: "center",
       backgroundSize: "cover",
+      minHeight: "100%",
     },
   });
   const classes = useStyles();

@@ -7,6 +7,7 @@ import { spacing } from "@material-ui/system";
 import { makeStyles } from "@material-ui/core/styles";
 import gsap from "gsap";
 import LineChart from "./chart/LineChart";
+import WeekTable from "./weekForecast/WeekTable";
 const useStyles = makeStyles((theme) => ({
   container: {
     marginBottom: "3rem",
@@ -29,9 +30,11 @@ function DisplayWeatherContainer() {
     <Grid container className={classes.container}>
       <Grid item xs={12} lg={6}>
         <DisplayCurrent ref={currentRef} />
+        <LineChart ref={chartRef} />
       </Grid>
       <Grid item xs={12} lg={6}>
-        <LineChart ref={chartRef} />
+        {/*<span>7-day Forecast</span>*/}
+        <WeekTable />
       </Grid>
     </Grid>
   );

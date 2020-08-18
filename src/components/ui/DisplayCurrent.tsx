@@ -76,9 +76,9 @@ const DisplayCurrent = React.forwardRef(
       tl.to(
         // @ts-ignore
         iconRef.current,
-        2,
+        1,
         { y: "-=5", ease: Sine.easeInOut }
-      ).to(iconRef.current, 1.5, { y: "+=5", ease: Sine.easeInOut });
+      ).to(iconRef.current, 1, { y: "+=5", ease: Sine.easeInOut });
     }, [current]);
     console.log(hourly);
     return (

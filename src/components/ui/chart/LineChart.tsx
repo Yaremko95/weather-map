@@ -8,7 +8,8 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     backgroundColor: "transparent",
     marginLeft: "1rem",
-    padding: "2rem",
+    paddingTop: "2rem",
+    paddingRight: "2rem",
     color: "whitesmoke",
     height: "300px",
   },
@@ -38,10 +39,10 @@ const LineChart = React.forwardRef((props, ref?: React.Ref<HTMLDivElement>) => {
       console.log(canvas);
       const context = canvas.getContext("2d");
 
-      const grad = context.createLinearGradient(93, 200, 107, 0);
+      var grad = context.createLinearGradient(102, 0, 98, 200);
 
-      grad.addColorStop(0, "rgba(194,98,72,0.3)");
-      grad.addColorStop(1, "rgba(255,255,255,1)");
+      grad.addColorStop(0, "rgba(194,98,72,1)");
+      grad.addColorStop(1, "rgba(255,255,255,0.1)");
 
       context.fillStyle = grad;
       context.fillRect(0, 0, 200, 200);
@@ -66,6 +67,9 @@ const LineChart = React.forwardRef((props, ref?: React.Ref<HTMLDivElement>) => {
               display: (ctx: any) => {
                 return true;
               },
+              // formatter: function (value: Number) {
+              //   return value + "something";
+              // },
             },
             data: convertedData.map((hr: Current) =>
               (hr.temp - 273.15).toFixed(1)
@@ -107,8 +111,8 @@ const LineChart = React.forwardRef((props, ref?: React.Ref<HTMLDivElement>) => {
           ticks: {
             fontColor: "white",
             maxRotation: 0.00001,
-            // padding: 20,
-            // labelOffset: 20,
+            padding: 5,
+            labelOffset: 5,
             callback(value: Number, i: Number) {
               const data = convertedData.map((obj: Current) => obj.dt);
               if (i <= data.indexOf("22.00") || i <= data.indexOf("23.00")) {
@@ -172,6 +176,7 @@ const LineChart = React.forwardRef((props, ref?: React.Ref<HTMLDivElement>) => {
               `Rain: ${convertedData[tooltipItem.index].rain["1h"]}mm/s;`
             );
           }
+          label.push(convertedData[tooltipItem.index].weather[0].description);
           return label;
         },
       },
