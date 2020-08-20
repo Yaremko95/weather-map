@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     color: "white",
     padding: "1rem 1rem",
+    overflow: "hidden",
   },
   paper: {
     backgroundColor: "transparent",

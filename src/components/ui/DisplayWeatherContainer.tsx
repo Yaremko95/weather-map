@@ -11,6 +11,7 @@ import WeekTable from "./weekForecast/WeekTable";
 const useStyles = makeStyles((theme) => ({
   container: {
     marginBottom: "3rem",
+    overflow: "hidden",
   },
 }));
 function DisplayWeatherContainer() {
