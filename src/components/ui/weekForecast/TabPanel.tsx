@@ -1,8 +1,10 @@
-import { useData } from "../../data/DataProvider";
+import { formatDirection, useData } from "../../data/DataProvider";
 import React, { useEffect, useState } from "react";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import MuiPaper from "@material-ui/core/Paper";
+import { WiBarometer, WiUmbrella } from "react-icons/wi";
+import { GiWindsock } from "react-icons/gi";
 import {
   Table,
   TableHead,
@@ -11,20 +13,24 @@ import {
   TableBody,
 } from "@material-ui/core";
 import MuiTableCell from "@material-ui/core/TableCell";
+import { TimelineLite } from "gsap";
+import AppBar from "@material-ui/core/AppBar";
 
 const Paper = withStyles({
   root: {
-    backgroundColor: "transparent",
-    color: "whitesmoke",
+    backgroundColor: "rgb(0,0,0,.1)",
+    color: "rgb(255,255,255,.8)",
+    fontSize: "1.1rem",
     cursor: "pointer",
     padding: "2rem",
+    margin: "2rem 0",
   },
 })(MuiPaper);
 const useStyles = makeStyles((theme) => ({
   tempSection: {
     display: "flex",
     alignItems: "center",
-    color: "whitesmoke",
+    // color: "whitesmoke",
   },
   tempDescription: {
     display: "flex",
@@ -39,12 +45,22 @@ const useStyles = makeStyles((theme) => ({
   table: {
     margin: "2rem 0",
   },
+  weatherItem: {
+    display: "flex",
+    alignItems: "center",
+    paddingBottom: "0.5rem",
+  },
+  icon: {
+    fontSize: "2rem",
+    marginRight: "5px",
+  },
 }));
 const TableCell = withStyles({
   root: {
     borderBottom: "none",
     padding: "5px",
-    color: "#ffffff",
+    color: "rgb(255,255,255,.8)",
+    fontSize: "1.1rem",
   },
 })(MuiTableCell);
 function TabPanel(props: { value: number; index: number }) {
@@ -52,8 +68,18 @@ function TabPanel(props: { value: number; index: number }) {
   const { value, index } = props;
   const { daily } = useData();
   const [day, setDay] = useState(daily[value]);
+  let tabPanel: any = null;
   useEffect(() => {
     setDay(daily[value]);
+    console.log("value", value);
+    console.log("index", index);
+    const tl = new TimelineLite();
+    tl.from(tabPanel, 1.5, { y: -40, autoAlpha: 0, delay: 0.5 });
+
+    tl.play();
+    return () => {
+      tl.reverse();
+    };
   }, [value]);
   return (
     <div
@@ -63,7 +89,11 @@ function TabPanel(props: { value: number; index: number }) {
       aria-labelledby={`scrollable-auto-tab-${index}`}
     >
       {value === index && (
-        <Paper>
+        <Paper
+          elevation={3}
+          {...({ ref: (e: any) => (tabPanel = e) } as any)}
+          style={{ display: "hidden" }}
+        >
           <Grid container>
             <Grid item xs={12} className={classes.tempSection}>
               <img
@@ -149,6 +179,35 @@ function TabPanel(props: { value: number; index: number }) {
                   </TableBody>
                 </Table>
               </TableContainer>
+            </Grid>
+            <Grid container item xs={12}>
+              <Grid item xs={4} className={classes.weatherItem}>
+                <WiUmbrella className={classes.icon} />
+                <span>
+                  {day.rain
+                    ? day.rain + "mm/h (" + day.pop + "%)"
+                    : day.pop + "%"}
+                </span>
+              </Grid>
+              <Grid item xs={3} className={classes.weatherItem}>
+                <GiWindsock className={classes.icon} />
+                <span>
+                  {day.wind_speed}mm/s {formatDirection(day.wind_deg)}
+                </span>
+              </Grid>
+              <Grid item xs={3} className={classes.weatherItem}>
+                <WiBarometer className={classes.icon} />
+                {day.pressure}hPa
+              </Grid>
+              <Grid item xs={2} className={classes.weatherItem}>
+                <span>Humidity: {day.humidity}%</span>
+              </Grid>
+              <Grid item xs={2} className={classes.weatherItem}>
+                <span>UV: {day.uvi}</span>
+              </Grid>
+              <Grid item xs={3} className={classes.weatherItem}>
+                <span>Dew point: {day.dew_point}°C</span>
+              </Grid>
             </Grid>
           </Grid>
         </Paper>

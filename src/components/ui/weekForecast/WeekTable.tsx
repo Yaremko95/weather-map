@@ -7,7 +7,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { Daily } from "../../../types/types";
-import { useData } from "../../data/DataProvider";
+import { formatDate, useData } from "../../data/DataProvider";
 import { Grid } from "@material-ui/core";
 import { RiCelsiusLine } from "react-icons/ri";
 import { AiFillCaretDown } from "react-icons/ai";
@@ -36,27 +36,6 @@ const TableCell = withStyles({
   },
 })(MuiTableCell);
 
-export const formatDate = (dt: any) => {
-  const a = new Date(dt * 1000);
-  const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-  const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"];
-  return (
-    weekDays[a.getDay()] + ", " + months[a.getMonth()] + ", " + a.getDate()
-  );
-};
 const WeekTable = () => {
   const classes = useStyles();
   const { daily } = useData();
@@ -70,7 +49,7 @@ const WeekTable = () => {
   useEffect(() => {
     const tl = new TimelineLite({ paused: true });
 
-    tl.staggerFrom(rows, 1.5, { autoAlpha: 0, x: 40 }, 0.1);
+    tl.staggerFrom(rows, 1, { autoAlpha: 0, x: 40 }, 0.1);
     tl.play();
   }, [show]);
 
@@ -91,10 +70,14 @@ const WeekTable = () => {
                   className={classes.tableRow}
                   key={row.dt}
                   onClick={() => handleClick(index)}
-                  {...({ ref: (li: any) => (rows[index] = li) } as any)}
+                  {...({ ref: (e: any) => (rows[index] = e) } as any)}
                 >
                   <TableCell component="th" scope="row">
-                    {formatDate(row.dt)}
+                    {formatDate(row.dt).day +
+                      ", " +
+                      formatDate(row.dt).month +
+                      " " +
+                      formatDate(row.dt).date}
                   </TableCell>
                   <TableCell align="right">
                     <img

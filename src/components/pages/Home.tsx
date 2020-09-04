@@ -7,6 +7,7 @@ import DisplayWeatherContainer from "../ui/DisplayWeatherContainer";
 import { useData } from "../data/DataProvider";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
+import withAuth from "../auth/withAuth";
 const useStyles = makeStyles((theme) => ({
   main: {
     height: "100%",
@@ -38,4 +39,4 @@ function Home(props: RouteComponentProps) {
   );
 }
 
-export default Home;
+export default withAuth(Home);

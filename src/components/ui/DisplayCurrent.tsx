@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { useData } from "../data/DataProvider";
+import { formatDate, useData } from "../data/DataProvider";
 import { RiCelsiusLine } from "react-icons/ri";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
@@ -44,32 +44,19 @@ const DisplayCurrent = React.forwardRef(
     const [convertedDate, convert] = useState("");
     const iconRef = useRef<HTMLImageElement>(null);
     useEffect(() => {
-      const a = new Date(current.dt * 1000);
-      const months = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ];
-      const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"];
-      const year = a.getFullYear();
-      const month = months[a.getMonth()];
-      const date = a.getDate();
-      const hour = a.getHours();
-      const min = a.getMinutes();
-      const sec = a.getSeconds();
-      const day = weekDays[a.getDay()];
-
+      const formattedDate = formatDate(current.dt);
       convert(
-        day + ", " + date + " " + month + " " + year + " " + hour + ":" + min
+        formattedDate.day +
+          ", " +
+          formattedDate.date +
+          " " +
+          formattedDate.month +
+          " " +
+          formattedDate.year +
+          " " +
+          formattedDate.hour +
+          ":" +
+          formattedDate.min
       );
 
       const tl = new TimelineMax({ repeat: -1 });

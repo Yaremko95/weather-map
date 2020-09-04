@@ -1,6 +1,64 @@
 import React from "react";
 import { Forecast, Current, Daily } from "../../types/types";
+import authAxios from "../auth/authAxios";
+import axios from "axios";
+export const formatDirection = (angle: number) => {
+  const val = Math.floor(angle / 22.5 + 0.5);
+  const arr = [
+    "N",
+    "NNE",
+    "NE",
+    "ENE",
+    "E",
+    "ESE",
+    "SE",
+    "SSE",
+    "S",
+    "SSW",
+    "SW",
+    "WSW",
+    "W",
+    "WNW",
+    "NW",
+    "NNW",
+  ];
+  return arr[val % 16];
+};
 
+export const formatDate = (dt: number) => {
+  const a = new Date(dt * 1000);
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"];
+  const year = a.getFullYear();
+  const month = months[a.getMonth()];
+  const date = a.getDate();
+  const hour = a.getHours();
+  const min = a.getMinutes();
+  const sec = a.getSeconds();
+  const day = weekDays[a.getDay()];
+  return {
+    year,
+    month,
+    date,
+    day,
+    hour,
+    min,
+    sec,
+  };
+};
 export const getData = async (
   latt: number,
   longt: number,
@@ -14,7 +72,19 @@ export const getData = async (
       successCallback(data);
     });
 };
-
+const authorize = async () => {
+  const res = await authAxios.get("/weather", { withCredentials: true });
+  let user = {};
+  if (!res) {
+    const secondRes = await axios.get("/weather", {
+      withCredentials: true,
+    });
+    user = secondRes.data;
+  } else {
+    user = res.data;
+  }
+  console.log(user);
+};
 type DataProviderProps = { children: React.ReactNode };
 
 const DataContext = React.createContext<any | undefined>(undefined);
@@ -22,6 +92,8 @@ const DataContext = React.createContext<any | undefined>(undefined);
 export const useData = () => {
   const context = React.useContext(DataContext);
   const [
+    user,
+    setUser,
     [current, setCurrent],
     [hourly, setHourly],
     [daily, setDaily],
@@ -68,6 +140,8 @@ export const useData = () => {
     fetchData,
     loading,
     toggleLoading,
+    user,
+    setUser,
   };
 };
 
@@ -79,42 +153,47 @@ function DataProvider({ children }: DataProviderProps) {
   const [query, setQuery] = React.useState("");
   const [loading, toggleLoading] = React.useState(true);
   const [position, setPosition] = React.useState({});
+  const [user, setUser] = React.useState(false);
 
   React.useEffect(() => {
-    window.navigator.geolocation.getCurrentPosition(
-      (position) => {
-        console.log(position);
-        fetch(
-          // `https://geocode.xyz?auth=828220760012715928584x6950&locate=${position.coords.latitude},${position.coords.longitude}&json=1`
-          `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${position.coords.latitude}&longitude=${position.coords.longitude}&localityLanguage=en`
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data);
-            setQuery(`${data.city}`);
-          });
-        getData(position.coords.latitude, position.coords.longitude, (data) => {
-          if (!loading) {
-            toggleLoading(true);
-          }
-          setTimezone(data.timezone);
-          setCurrent(data.current);
-          setHourly(data.hourly);
-          setDaily(data.daily);
-          toggleLoading(false);
-        });
-      },
-      (e) => {
-        console.log(e);
-      },
-      {
-        // timeout: 0,
-        enableHighAccuracy: true,
-      }
-    );
+    authorize();
+
+    // window.navigator.geolocation.getCurrentPosition(
+    //   (position) => {
+    //     console.log(position);
+    //     fetch(
+    //       // `https://geocode.xyz?auth=828220760012715928584x6950&locate=${position.coords.latitude},${position.coords.longitude}&json=1`
+    //       `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${position.coords.latitude}&longitude=${position.coords.longitude}&localityLanguage=en`
+    //     )
+    //       .then((response) => response.json())
+    //       .then((data) => {
+    //         console.log(data);
+    //         setQuery(`${data.city}`);
+    //       });
+    //     getData(position.coords.latitude, position.coords.longitude, (data) => {
+    //       if (!loading) {
+    //         toggleLoading(true);
+    //       }
+    //       setTimezone(data.timezone);
+    //       setCurrent(data.current);
+    //       setHourly(data.hourly);
+    //       setDaily(data.daily);
+    //       toggleLoading(false);
+    //     });
+    //   },
+    //   (e) => {
+    //     console.log(e);
+    //   },
+    //   {
+    //     // timeout: 0,
+    //     enableHighAccuracy: true,
+    //   }
+    // );
   }, []);
   const value = React.useMemo(
     () => [
+      user,
+      setUser,
       [current, setCurrent],
       [hourly, setHourly],
       [daily, setDaily],
@@ -127,7 +206,7 @@ function DataProvider({ children }: DataProviderProps) {
       position,
       setPosition,
     ],
-    [current, hourly, daily, timezone, query, loading, position]
+    [current, hourly, daily, timezone, query, loading, position, user]
   );
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
