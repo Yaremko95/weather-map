@@ -9,10 +9,8 @@ import {
 } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
-import gsap from "gsap";
 import FormModal from "./FormModal";
-import { TimelineLite } from "gsap";
-import TableRow from "@material-ui/core/TableRow";
+import gsap from "gsap";
 
 const styles = makeStyles((theme: Theme) => ({
   lineContainer: {
@@ -58,7 +56,6 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       display: "flex",
       flexDirection: "column",
-
       width: "20%",
       padding: "2.5rem 2rem",
       backgroundColor: "rgb(0, 0, 0, 0.2)",
@@ -102,29 +99,34 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
-function Login() {
+function SignUp() {
   const classes = useStyles();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [confirmPass, setConfirmPass] = React.useState("");
   const [error, setError] = React.useState(false);
+  const [match, setMatch] = React.useState(false);
   const { user, setUser } = useData();
   const submit = async () => {
-    //setUser(true);
-    const res = await fetch("http://localhost:3008/users/login", {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-      headers: {
-        "Content-type": "application/json",
-      },
-      credentials: "include",
-    });
-    console.log(res);
-    if (res.status === 200) {
-      const data = await res.json();
-      setError(false);
-      console.log(data);
+    if (password === confirmPass) {
+      const res = await fetch("http://localhost:3008/users/signup", {
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+        headers: {
+          "Content-type": "application/json",
+        },
+        credentials: "include",
+      });
+      console.log(res);
+      if (res.status === 200) {
+        const data = await res.json();
+        setError(false);
+        console.log(data);
+      } else {
+        setError(true);
+      }
     } else {
-      setError(true);
+      setMatch(true);
     }
   };
   let modalRef = React.useRef(null);
@@ -151,7 +153,7 @@ function Login() {
           }
           style={{ height: "3rem" }}
         />
-        <h2 style={{ color: "whitesmoke" }}>Sign In To Your Account</h2>
+        <h2 style={{ color: "whitesmoke" }}>Create New Account</h2>
         <TextField
           className={classes.input}
           error={error}
@@ -172,6 +174,16 @@ function Login() {
           variant="filled"
           onChange={(e) => setPassword(e.currentTarget.value)}
         />
+        <TextField
+          className={classes.input}
+          error={match}
+          id="filled-error-helper-text"
+          label="Confirm password"
+          defaultValue={confirmPass}
+          helperText={match ? "Password doesn't match" : ""}
+          variant="filled"
+          onChange={(e) => setConfirmPass(e.currentTarget.value)}
+        />
         <div
           style={{
             width: "100%",
@@ -189,15 +201,15 @@ function Login() {
               color: "rgba(240, 240, 240, 0.58)",
             }}
           >
-            DON'T HAVE AN ACCOUNT?
+            Already have an account?
             <Link
-              to={"/signup"}
+              to={"/login"}
               style={{
                 color: "whitesmoke",
                 textDecoration: "none",
               }}
             >
-              <span> SIGN UP</span>
+              <span> LOG IN</span>
             </Link>
           </span>
         </div>
@@ -210,7 +222,7 @@ function Login() {
             background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
           }}
         >
-          Login
+          SIGN UP
         </Button>
         <BreakLine />
         <a
@@ -254,4 +266,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default SignUp;

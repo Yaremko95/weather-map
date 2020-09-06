@@ -12,7 +12,7 @@ authAxios.interceptors.response.use(
   },
   function (error) {
     const originalRequest = error.config;
-    console.log(error);
+    console.log("!!!", error);
 
     if (
       error.response.status === 401 &&
@@ -23,6 +23,7 @@ authAxios.interceptors.response.use(
 
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
+      console.log("retrying");
       const refreshToken = Cookies.get("refreshToken");
       return axios
         .post(
@@ -31,8 +32,9 @@ authAxios.interceptors.response.use(
           { withCredentials: true }
         )
         .then((res) => {
+          console.log("response inside", res);
           if (res.status === 200) {
-            return Promise.resolve();
+            return Promise.resolve(res);
           }
         });
     }

@@ -73,16 +73,19 @@ export const getData = async (
     });
 };
 const authorize = async () => {
-  const res = await authAxios.get("/weather", { withCredentials: true });
+  const res = await authAxios.get("/list", { withCredentials: true });
   let user = {};
+  console.log("res", res);
   if (!res) {
-    const secondRes = await axios.get("/weather", {
+    const secondRes = await axios.get("/list", {
       withCredentials: true,
     });
     user = secondRes.data;
   } else {
     user = res.data;
   }
+  return user;
+  // const {setUser} =useData()
   console.log(user);
 };
 type DataProviderProps = { children: React.ReactNode };
@@ -153,11 +156,11 @@ function DataProvider({ children }: DataProviderProps) {
   const [query, setQuery] = React.useState("");
   const [loading, toggleLoading] = React.useState(true);
   const [position, setPosition] = React.useState({});
-  const [user, setUser] = React.useState(false);
+  const [user, setUser] = React.useState(null);
 
   React.useEffect(() => {
-    authorize();
-
+    //const authorized = authorize();
+    // setUser(authorized);
     // window.navigator.geolocation.getCurrentPosition(
     //   (position) => {
     //     console.log(position);
