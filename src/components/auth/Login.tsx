@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useData } from "../data/DataProvider";
 import TextField from "@material-ui/core/TextField";
+import { Redirect } from "react-router-dom";
 import {
   createStyles,
   makeStyles,
@@ -107,7 +108,7 @@ function Login() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState(false);
-  const { user, setUser } = useData();
+  const [loggedIn, isLoggedIn] = React.useState(false);
   const submit = async () => {
     //setUser(true);
     const res = await fetch("http://localhost:3008/users/login", {
@@ -122,6 +123,7 @@ function Login() {
     if (res.status === 200) {
       const data = await res.json();
       setError(false);
+      isLoggedIn(true);
       console.log(data);
     } else {
       setError(true);
@@ -135,8 +137,16 @@ function Login() {
       y: -100,
       opacity: 0,
     });
+    return () => {
+      tl.to(modalRef.current, 1, {
+        y: 100,
+        opacity: 0,
+      });
+    };
   }, []);
-
+  if (loggedIn) {
+    return <Redirect to={"/"} />;
+  }
   return (
     <div className={classes.container}>
       <form

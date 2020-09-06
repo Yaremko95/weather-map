@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useData } from "../data/DataProvider";
+import { Redirect } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
 import {
   createStyles,
@@ -106,6 +107,7 @@ function SignUp() {
   const [confirmPass, setConfirmPass] = React.useState("");
   const [error, setError] = React.useState(false);
   const [match, setMatch] = React.useState(false);
+  const [registered, isRegistered] = React.useState(false);
   const { user, setUser } = useData();
   const submit = async () => {
     if (password === confirmPass) {
@@ -121,6 +123,7 @@ function SignUp() {
       if (res.status === 200) {
         const data = await res.json();
         setError(false);
+        isRegistered(true);
         console.log(data);
       } else {
         setError(true);
@@ -133,12 +136,20 @@ function SignUp() {
   useEffect(() => {
     const tl = gsap.timeline();
 
-    tl.from(modalRef.current, 1.5, {
+    tl.from(modalRef.current, 1, {
       y: -100,
       opacity: 0,
     });
+    return () => {
+      tl.to(modalRef.current, 1, {
+        y: 100,
+        opacity: 0,
+      });
+    };
   }, []);
-
+  if (registered) {
+    return <Redirect to={"/login"} />;
+  }
   return (
     <div className={classes.container}>
       <form

@@ -13,6 +13,7 @@ export default [
   {
     path: "/login",
     exact: true,
+
     layout: MainLayout,
     component: Login,
   },

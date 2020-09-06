@@ -159,39 +159,47 @@ function DataProvider({ children }: DataProviderProps) {
   const [user, setUser] = React.useState(null);
 
   React.useEffect(() => {
-    //const authorized = authorize();
+    // const authorized = authorize();
+
     // setUser(authorized);
-    // window.navigator.geolocation.getCurrentPosition(
-    //   (position) => {
-    //     console.log(position);
-    //     fetch(
-    //       // `https://geocode.xyz?auth=828220760012715928584x6950&locate=${position.coords.latitude},${position.coords.longitude}&json=1`
-    //       `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${position.coords.latitude}&longitude=${position.coords.longitude}&localityLanguage=en`
-    //     )
-    //       .then((response) => response.json())
-    //       .then((data) => {
-    //         console.log(data);
-    //         setQuery(`${data.city}`);
-    //       });
-    //     getData(position.coords.latitude, position.coords.longitude, (data) => {
-    //       if (!loading) {
-    //         toggleLoading(true);
-    //       }
-    //       setTimezone(data.timezone);
-    //       setCurrent(data.current);
-    //       setHourly(data.hourly);
-    //       setDaily(data.daily);
-    //       toggleLoading(false);
-    //     });
-    //   },
-    //   (e) => {
-    //     console.log(e);
-    //   },
-    //   {
-    //     // timeout: 0,
-    //     enableHighAccuracy: true,
-    //   }
-    // );
+    window.navigator.geolocation.getCurrentPosition(
+      (position) => {
+        console.log(position);
+        // authAxios
+        //   .get(
+        //     `/weather?lat=${position.coords.latitude}&longt=${position.coords.longitude}`,
+        //     { withCredentials: true }
+        //   )
+        //   .then((res) => console.log(res));
+
+        // fetch(
+        //   // `https://geocode.xyz?auth=828220760012715928584x6950&locate=${position.coords.latitude},${position.coords.longitude}&json=1`
+        //   `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${position.coords.latitude}&longitude=${position.coords.longitude}&localityLanguage=en`
+        // )
+        //   .then((response) => response.json())
+        //   .then((data) => {
+        //     console.log(data);
+        //     setQuery(`${data.city}`);
+        //   });
+        // getData(position.coords.latitude, position.coords.longitude, (data) => {
+        //   if (!loading) {
+        //     toggleLoading(true);
+        //   }
+        //   setTimezone(data.timezone);
+        //   setCurrent(data.current);
+        //   setHourly(data.hourly);
+        //   setDaily(data.daily);
+        //   toggleLoading(false);
+        // });
+      },
+      (e) => {
+        console.log(e);
+      },
+      {
+        // timeout: 0,
+        enableHighAccuracy: true,
+      }
+    );
   }, []);
   const value = React.useMemo(
     () => [

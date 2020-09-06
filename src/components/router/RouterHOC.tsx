@@ -10,29 +10,27 @@ import DataProvider from "../data/DataProvider";
 
 function RouterHoc() {
   return (
-    <DataProvider>
-      <Router>
-        <Switch>
-          {routes.map((route, index) => {
-            return (
-              <Route
-                key={index}
-                path={route.path}
-                exact={route.exact}
-                render={(props) => {
-                  return (
-                    <route.layout {...props}>
-                      <route.component {...props} />
-                    </route.layout>
-                  );
-                }}
-              />
-            );
-          })}
-          <Redirect to="/" />
-        </Switch>
-      </Router>
-    </DataProvider>
+    <Router>
+      <Switch>
+        {routes.map((route, index) => {
+          return (
+            <Route
+              key={index}
+              path={route.path}
+              exact={route.exact}
+              render={(props) => {
+                return (
+                  <route.layout {...props}>
+                    <route.component {...props} />
+                  </route.layout>
+                );
+              }}
+            />
+          );
+        })}
+        <Redirect to="/" />
+      </Switch>
+    </Router>
   );
 }
 
